@@ -1,0 +1,27 @@
+{
+  "name": "omnipdf",
+  "version": "1.0.0",
+  "description": "Ultra-modern cross-platform PDF converter with AI capabilities",
+  "private": true,
+  "workspaces": [
+    "apps/*",
+    "packages/*"
+  ],
+  "scripts": {
+    "dev": "turbo run dev",
+    "build": "turbo run build",
+    "lint": "turbo run lint",
+    "format": "prettier --write \"**/*.{ts,tsx,js,jsx,json,md}\"",
+    "db:generate": "cd packages/api && npm run db:generate",
+    "db:push": "cd packages/api && npm run db:push"
+  },
+  "devDependencies": {
+    "turbo": "^1.13.0",
+    "prettier": "^3.2.0",
+    "typescript": "^5.3.0"
+  },
+  "engines": {
+    "node": ">=18.0.0"
+  },
+  "packageManager": "npm@10.0.0"
+}

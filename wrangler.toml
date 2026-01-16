@@ -1,0 +1,26 @@
+name = "omnipdf-worker"
+main = "worker.ts"
+compatibility_date = "2024-01-01"
+compatibility_flags = ["nodejs_compat"]
+
+[vars]
+ENVIRONMENT = "development"
+
+[[kv_namespaces]]
+binding = "CONVERSIONS"
+id = "your-kv-namespace-id"
+
+[[kv_namespaces]]
+binding = "RATE_LIMIT"
+id = "your-rate-limit-namespace-id"
+
+[[r2_buckets]]
+binding = "DOCUMENTS"
+bucket_name = "omnipdf-documents"
+
+[triggers]
+crons = []
+
+[limits]
+cpu_ms = 10000
+memory = 128

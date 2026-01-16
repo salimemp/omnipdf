@@ -1,0 +1,47 @@
+# OmniPDF Robots.txt
+# Last updated: January 2024
+
+User-agent: *
+Allow: /
+
+# Disallow private/admin areas
+Disallow: /dashboard/
+Disallow: /settings/
+Disallow: /api/
+Disallow: /auth/
+Disallow: /*.json$
+Disallow: /*.xml$
+
+# Sitemap
+Sitemap: https://omnipdf.com/sitemap.xml
+Sitemap: https://omnipdf.com/sitemap-pages.xml
+Sitemap: https://omnipdf.com/sitemap-tools.xml
+
+# Crawl-delay for robots that support it
+Crawl-delay: 10
+
+# Google special instructions
+User-agent: Googlebot
+Allow: /
+Sitemap: https://omnipdf.com/sitemap.xml
+
+# Bing special instructions
+User-agent: Bingbot
+Allow: /
+Sitemap: https://omnipdf.com/sitemap.xml
+
+# Facebook crawler
+User-agent: FacebookExternalHit
+Allow: /
+
+# Twitter crawler
+User-agent: Twitterbot
+Allow: /
+
+# LinkedIn crawler
+User-agent: LinkedInBot
+Allow: /
+
+# Discord crawler
+User-agent: Discordbot
+Allow: /

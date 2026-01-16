@@ -1,0 +1,203 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+enum SubscriptionTier {
+  FREE
+  PRO
+  ENTERPRISE
+}
+
+enum SubscriptionStatus {
+  ACTIVE
+  CANCELED
+  PAST_DUE
+  TRIALING
+}
+
+enum ConversionStatus {
+  PENDING
+  PROCESSING
+  COMPLETED
+  FAILED
+}
+
+model User {
+  id                 String             @id @default(uuid())
+  email              String             @unique
+  name               String?
+  avatar_url         String?
+  subscription_tier  SubscriptionTier   @default(FREE)
+  subscription_status SubscriptionStatus @default(ACTIVE)
+  stripe_customer_id String?
+  created_at         DateTime          @default(now())
+  updated_at         DateTime          @updatedAt
+
+  documents     Document[]
+  conversions   Conversion[]
+  usage_analytics UsageAnalytics[]
+  subscriptions Subscription[]
+  passkeys      Passkey[]
+  auth_sessions AuthSession[]
+  devices       Device[]
+}
+
+model Document {
+  id               String           @id @default(uuid())
+  user_id          String
+  original_filename String
+  original_format  String
+  converted_format String?
+  file_size        Int
+  storage_path     String
+  status           ConversionStatus @default(PENDING)
+  error_message    String?
+  cloud_provider   String?
+  cloud_file_id    String?
+  created_at       DateTime         @default(now())
+  updated_at       DateTime         @updatedAt
+
+  user User @relation(fields: [user_id], references: [id], onDelete: Cascade)
+
+  @@index([user_id])
+  @@index([status])
+}
+
+model Conversion {
+  id              String           @id @default(uuid())
+  user_id         String
+  type            String
+  input_documents String[]
+  output_format   String?
+  options         Json?
+  status          ConversionStatus @default(PENDING)
+  progress        Int              @default(0)
+  result_url      String?
+  error_message   String?
+  created_at      DateTime         @default(now())
+  updated_at      DateTime         @updatedAt
+
+  user User @relation(fields: [user_id], references: [id], onDelete: Cascade)
+
+  @@index([user_id])
+  @@index([status])
+  @@index([created_at])
+}
+
+model UsageAnalytics {
+  id                String   @id @default(uuid())
+  user_id           String
+  period_start      DateTime
+  period_end        DateTime
+  total_conversions Int      @default(0)
+  storage_used_bytes BigInt  @default(0)
+  ai_api_calls      Int      @default(0)
+  created_at        DateTime @default(now())
+
+  user User @relation(fields: [user_id], references: [id], onDelete: Cascade)
+
+  @@unique([user_id, period_start])
+  @@index([user_id])
+}
+
+model Subscription {
+  id               String   @id @default(uuid())
+  user_id          String
+  stripe_sub_id    String   @unique
+  stripe_price_id  String
+  current_period_end DateTime
+  cancel_at_period_end Boolean @default(false)
+  created_at       DateTime @default(now())
+  updated_at       DateTime @updatedAt
+
+  user User @relation(fields: [user_id], references: [id], onDelete: Cascade)
+
+  @@index([user_id])
+}
+
+model AuditLog {
+  id         String   @id @default(uuid())
+  user_id    String?
+  action     String
+  resource   String?
+  resource_id String?
+  ip_address String?
+  user_agent String?
+  metadata   Json?
+  created_at DateTime @default(now())
+
+  @@index([user_id])
+  @@index([action])
+  @@index([created_at])
+}
+
+model Passkey {
+  id           String   @id @default(uuid())
+  user_id      String
+  credential_id String  @unique
+  public_key   String
+  counter      Int      @default(0)
+  device_type  String
+  transports   String[]
+  created_at   DateTime @default(now())
+  last_used_at DateTime @default(now())
+
+  user User @relation(fields: [user_id], references: [id], onDelete: Cascade)
+
+  @@index([user_id])
+  @@index([credential_id])
+}
+
+model AuthSession {
+  id           String   @id @default(uuid())
+  user_id      String
+  session_token String  @unique
+  device_info  String?
+  ip_address   String?
+  user_agent   String?
+  is_active    Boolean  @default(true)
+  expires_at   DateTime
+  created_at   DateTime @default(now())
+
+  user User @relation(fields: [user_id], references: [id], onDelete: Cascade)
+
+  @@index([user_id])
+  @@index([session_token])
+  @@index([expires_at])
+}
+
+model Device {
+  id           String   @id @default(uuid())
+  user_id      String
+  device_id    String   @unique
+  device_type  String   // "ios", "android", "web", "desktop"
+  device_name  String?
+  fcm_token    String?
+  biometric_enabled Boolean @default(false)
+  last_active_at DateTime @default(now())
+  created_at   DateTime @default(now())
+
+  user User @relation(fields: [user_id], references: [id], onDelete: Cascade)
+
+  @@index([user_id])
+  @@index([device_id])
+}
+
+model QRCodeSession {
+  id           String   @id @default(uuid())
+  session_token String  @unique
+  user_id      String
+  device_id    String?
+  is_authenticated Boolean @default(false)
+  expires_at   DateTime
+  created_at   DateTime @default(now())
+
+  @@index([session_token])
+  @@index([user_id])
+  @@index([expires_at])
+}
