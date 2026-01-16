@@ -245,10 +245,10 @@ export function EnterpriseBranding({
                     className="hidden"
                     id="logo-upload"
                   />
-                  <label htmlFor="logo-upload">
-                    <Button variant="secondary" size="sm" component="span">
+                  <label htmlFor="logo-upload" className="cursor-pointer">
+                    <span className="inline-flex items-center justify-center px-3 py-1.5 text-xs font-medium rounded-lg bg-surface-100 text-surface-900 hover:bg-surface-200 dark:bg-surface-800 dark:text-surface-100 dark:hover:bg-surface-700">
                       {uploading ? "Uploading..." : "Upload Logo"}
-                    </Button>
+                    </span>
                   </label>
                   <p className="text-xs text-surface-500 mt-1">
                     Recommended: 200x50px, PNG or SVG
@@ -290,10 +290,10 @@ export function EnterpriseBranding({
                   className="hidden"
                   id="favicon-upload"
                 />
-                <label htmlFor="favicon-upload">
-                  <Button variant="secondary" size="sm" component="span">
+                <label htmlFor="favicon-upload" className="cursor-pointer">
+                  <span className="inline-flex items-center justify-center px-3 py-1.5 text-xs font-medium rounded-lg bg-surface-100 text-surface-900 hover:bg-surface-200 dark:bg-surface-800 dark:text-surface-100 dark:hover:bg-surface-700">
                     Upload Favicon
-                  </Button>
+                  </span>
                 </label>
               </div>
             </div>

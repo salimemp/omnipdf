@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect, useCallback } from "react";
+import { useState, useEffect, useCallback, useRef } from "react";
 
 interface UseOfflineOptions {
   onOnline?: () => void;
@@ -93,9 +93,13 @@ export function useOffline({
       setOfflineQueue(newQueue);
       localStorage.setItem("offlineQueue", JSON.stringify(newQueue));
 
-      if ("serviceWorker" in navigator && "SyncManager" in window) {
+      if ("serviceWorker" in navigator) {
         navigator.serviceWorker.ready.then((registration) => {
-          registration.sync.register("sync-conversions").catch(console.error);
+          // @ts-ignore - sync is not in standard types
+          if (registration.sync && registration.sync.register) {
+            // @ts-ignore
+            registration.sync.register("sync-conversions").catch(console.error);
+          }
         });
       }
     },
@@ -189,18 +193,4 @@ export function useOfflineFileStorage() {
     removeFile,
     clearAll,
   };
-}
-
-export function useBackgroundSync(tag: string = "default-sync") {
-  const [pendingSync, setPendingSync] = useState(0);
-
-  useEffect(() => {
-    if (!("serviceWorker" in navigator) || !("SyncManager" in window)) return;
-
-    navigator.serviceWorker.ready.then((registration) => {
-      registration.sync.register(tag).catch(console.error);
-    });
-  }, [tag]);
-
-  return { pendingSync };
 }

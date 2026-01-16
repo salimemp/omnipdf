@@ -50,7 +50,7 @@ export async function POST(request: NextRequest) {
 
     for (const { type, pattern } of searchPatterns) {
       const matches = text.match(pattern) || [];
-      const uniqueMatches = [...new Set(matches)];
+      const uniqueMatches = Array.from(new Set(matches));
 
       for (const match of uniqueMatches) {
         extractedContent.push({
