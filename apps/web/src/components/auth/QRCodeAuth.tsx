@@ -16,11 +16,10 @@ import {
   CardDescription,
 } from "@omnipdf/ui/src/Card";
 import { createQRCodeSession, pollForQRCodeAuth } from "@/lib/auth/client";
-import type { AuthError } from "@/lib/auth/types";
 
 interface QRCodeAuthProps {
   onSuccess?: () => void;
-  onError?: (error: AuthError) => void;
+  onError?: (error: { code: string; message: string }) => void;
 }
 
 export function QRCodeAuth({ onSuccess, onError }: QRCodeAuthProps) {
@@ -46,7 +45,7 @@ export function QRCodeAuth({ onSuccess, onError }: QRCodeAuthProps) {
 
     if (sessionError) {
       setError(sessionError.message);
-      onError?.(sessionError);
+      onError?.({ code: "UNKNOWN", message: sessionError.message });
       setLoading(false);
       return;
     }

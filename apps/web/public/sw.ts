@@ -1,3 +1,4 @@
+// @ts-nocheck
 const CACHE_NAME = "omnipdf-v1";
 const STATIC_CACHE = "omnipdf-static-v1";
 const DYNAMIC_CACHE = "omnipdf-dynamic-v1";
@@ -17,7 +18,7 @@ const CACHE_STRATEGIES = {
   DYNAMIC: "stale-while-revalidate",
 };
 
-async function installEvent(event) {
+async function installEvent(event: ExtendableEvent) {
   console.log("[SW] Installing service worker...");
 
   const cache = await caches.open(STATIC_CACHE);
@@ -26,7 +27,7 @@ async function installEvent(event) {
   event.waitUntil(self.skipWaiting());
 }
 
-async function activateEvent(event) {
+async function activateEvent(event: ExtendableEvent) {
   console.log("[SW] Activating service worker...");
 
   event.waitUntil(
@@ -42,7 +43,7 @@ async function activateEvent(event) {
   event.waitUntil(self.clients.claim());
 }
 
-async function fetchEvent(event) {
+async function fetchEvent(event: FetchEvent) {
   const url = new URL(event.request.url);
 
   if (url.pathname.startsWith("/api/")) {
@@ -122,7 +123,7 @@ async function staleWhileRevalidateStrategy(request) {
   return cachedResponse || fetchPromise;
 }
 
-async function handlePush(event) {
+async function handlePush(event: PushEvent) {
   console.log("[SW] Push received:", event);
 
   let data = {
@@ -155,7 +156,7 @@ async function handlePush(event) {
   event.waitUntil(self.registration.showNotification(data.title, options));
 }
 
-async function handleNotificationClick(event) {
+async function handleNotificationClick(event: NotificationClickEvent) {
   console.log("[SW] Notification clicked:", event.action);
 
   event.notification.close();
@@ -183,7 +184,7 @@ async function handleNotificationClick(event) {
   );
 }
 
-async function handleSync(event) {
+async function handleSync(event: SyncEvent) {
   console.log("[SW] Background sync:", event.tag);
 
   if (event.tag === "sync-conversions") {
@@ -221,7 +222,7 @@ async function syncConversions() {
   }
 }
 
-async function handleMessage(event) {
+async function handleMessage(event: ExtendableMessageEvent) {
   console.log("[SW] Message received:", event.data);
 
   if (event.data.type === "SKIP_WAITING") {

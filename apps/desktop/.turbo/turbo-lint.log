@@ -1,5 +1,0 @@
-
-> @omnipdf/desktop@1.0.0 lint
-> echo 'Rust lint skipped (cargo not available)'
-
-Rust lint skipped (cargo not available)

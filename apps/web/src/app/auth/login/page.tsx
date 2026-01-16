@@ -27,7 +27,7 @@ import {
 import { MagicLinkForm } from "@/components/auth/MagicLinkForm";
 import { PasskeyAuth } from "@/components/auth/PasskeyAuth";
 import { QRCodeAuth } from "@/components/auth/QRCodeAuth";
-import { signInWithEmail, signInWithOAuth } from "@/lib/auth/client";
+import { signIn, signInWithEmail, signInWithOAuth } from "@/lib/auth/client";
 
 type AuthMode = "password" | "magiclink" | "passkey" | "qrcode";
 
@@ -44,7 +44,7 @@ export default function LoginPage() {
     setLoading(true);
     setError(null);
 
-    const { data, error: signInError } = await signInWithEmail(email, password);
+    const { data, error: signInError } = await signIn(email, password);
 
     if (signInError) {
       setError(signInError.message);

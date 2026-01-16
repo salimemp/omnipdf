@@ -78,12 +78,12 @@ const buttonStyles = `
 `;
 
 export const templates: Record<string, EmailTemplate> = {
-  'email-verification': {
-    subject: () => 'Verify Your Email - OmniPDF',
+  "email-verification": {
+    subject: () => "Verify Your Email - OmniPDF",
     render: (data) => `
       ${baseStyles}
         <h2 style="margin: 0 0 20px; color: #18181b; font-size: 24px; font-weight: 600;">
-          Welcome to OmniPDF, ${data.name || 'there'}!
+          Welcome to OmniPDF, ${data.name || "there"}!
         </h2>
         <p style="margin: 0 0 24px; color: #52525b; font-size: 16px; line-height: 1.6;">
           Thanks for signing up! To get started, please verify your email address by clicking the button below.
@@ -98,7 +98,7 @@ export const templates: Record<string, EmailTemplate> = {
           </tr>
         </table>
         <p style="margin: 24px 0 0; color: #71717a; font-size: 14px; line-height: 1.6;">
-          This verification link will expire in ${data.expiresIn || '24 hours'}.
+          This verification link will expire in ${data.expiresIn || "24 hours"}.
         </p>
         <p style="margin: 16px 0 0; color: #71717a; font-size: 14px; line-height: 1.6;">
           If you didn't create an account with OmniPDF, you can safely ignore this email.
@@ -111,7 +111,7 @@ export const templates: Record<string, EmailTemplate> = {
       Thanks for signing up! To get started, please verify your email address by visiting:
       ${data.verificationUrl}
 
-      This verification link will expire in ${data.expiresIn || '24 hours'}.
+      This verification link will expire in ${data.expiresIn || "24 hours"}.
 
       If you didn't create an account with OmniPDF, you can safely ignore this email.
 
@@ -120,15 +120,15 @@ export const templates: Record<string, EmailTemplate> = {
     `,
   },
 
-  'password-reset': {
-    subject: () => 'Reset Your Password - OmniPDF',
+  "password-reset": {
+    subject: () => "Reset Your Password - OmniPDF",
     render: (data) => `
       ${baseStyles}
         <h2 style="margin: 0 0 20px; color: #18181b; font-size: 24px; font-weight: 600;">
           Reset Your Password
         </h2>
         <p style="margin: 0 0 24px; color: #52525b; font-size: 16px; line-height: 1.6;">
-          Hi ${data.name || 'there'}, we received a request to reset your password. Click the button below to create a new password.
+          Hi ${data.name || "there"}, we received a request to reset your password. Click the button below to create a new password.
         </p>
         <table role="presentation" width="100%" cellspacing="0" cellpadding="0">
           <tr>
@@ -140,7 +140,7 @@ export const templates: Record<string, EmailTemplate> = {
           </tr>
         </table>
         <p style="margin: 24px 0 0; color: #71717a; font-size: 14px; line-height: 1.6;">
-          This link will expire in ${data.expiresIn || '1 hour'}.
+          This link will expire in ${data.expiresIn || "1 hour"}.
         </p>
         <p style="margin: 16px 0 0; color: #71717a; font-size: 14px; line-height: 1.6;">
           If you didn't request a password reset, please ignore this email or contact support if you have concerns.
@@ -150,12 +150,12 @@ export const templates: Record<string, EmailTemplate> = {
     renderText: (data) => `
       Reset Your Password
 
-      Hi ${data.name || 'there'}, we received a request to reset your password.
+      Hi ${data.name || "there"}, we received a request to reset your password.
 
       Visit the link below to create a new password:
       ${data.resetUrl}
 
-      This link will expire in ${data.expiresIn || '1 hour'}.
+      This link will expire in ${data.expiresIn || "1 hour"}.
 
       If you didn't request a password reset, please ignore this email.
 
@@ -164,12 +164,12 @@ export const templates: Record<string, EmailTemplate> = {
     `,
   },
 
-  'welcome': {
-    subject: () => 'Welcome to OmniPDF!',
+  welcome: {
+    subject: () => "Welcome to OmniPDF!",
     render: (data) => `
       ${baseStyles}
         <h2 style="margin: 0 0 20px; color: #18181b; font-size: 24px; font-weight: 600;">
-          Welcome to OmniPDF, ${data.name || 'there'}! 🎉
+          Welcome to OmniPDF, ${data.name || "there"}! 🎉
         </h2>
         <p style="margin: 0 0 24px; color: #52525b; font-size: 16px; line-height: 1.6;">
           Your account has been successfully created. Here's what you can do with OmniPDF:
@@ -177,24 +177,30 @@ export const templates: Record<string, EmailTemplate> = {
         <table role="presentation" width="100%" cellspacing="0" cellpadding="0">
           <tr>
             <td style="padding: 0 0 20px;">
-              ${(data.features || [
-                'Convert PDFs to Word, Excel, PowerPoint, and more',
-                'Merge, split, and compress PDF files',
-                'AI-powered document summarization and translation',
-                'Secure cloud storage integration'
-              ]).map(feature => `
+              ${(
+                data.features || [
+                  "Convert PDFs to Word, Excel, PowerPoint, and more",
+                  "Merge, split, and compress PDF files",
+                  "AI-powered document summarization and translation",
+                  "Secure cloud storage integration",
+                ]
+              )
+                .map(
+                  (feature: string) => `
                 <p style="margin: 0 0 12px; color: #52525b; font-size: 15px; line-height: 1.5;">
                   <span style="color: #0ea5e9; margin-right: 8px;">✓</span>
                   ${feature}
                 </p>
-              `).join('')}
+              `,
+                )
+                .join("")}
             </td>
           </tr>
         </table>
         <table role="presentation" width="100%" cellspacing="0" cellpadding="0">
           <tr>
             <td style="text-align: center; padding: 20px 0;">
-              <a href="${data.loginUrl || 'https://omnipdf.com/convert'}" style="${buttonStyles}">
+              <a href="${data.loginUrl || "https://omnipdf.com/convert"}" style="${buttonStyles}">
                 Start Converting
               </a>
             </td>
@@ -210,14 +216,18 @@ export const templates: Record<string, EmailTemplate> = {
 
       Your account has been successfully created. Here's what you can do:
 
-      ${(data.features || [
-        'Convert PDFs to Word, Excel, PowerPoint, and more',
-        'Merge, split, and compress PDF files',
-        'AI-powered document summarization and translation',
-        'Secure cloud storage integration'
-      ]).map(feature => `✓ ${feature}`).join('\n')}
+      ${(
+        data.features || [
+          "Convert PDFs to Word, Excel, PowerPoint, and more",
+          "Merge, split, and compress PDF files",
+          "AI-powered document summarization and translation",
+          "Secure cloud storage integration",
+        ]
+      )
+        .map((feature: string) => `✓ ${feature}`)
+        .join("\n")}
 
-      Get started at: ${data.loginUrl || 'https://omnipdf.com/convert'}
+      Get started at: ${data.loginUrl || "https://omnipdf.com/convert"}
 
       Need help? Our support team is here for you.
 
@@ -226,7 +236,7 @@ export const templates: Record<string, EmailTemplate> = {
     `,
   },
 
-  'conversion-complete': {
+  "conversion-complete": {
     subject: (data) => `Your ${data.conversionType} is ready - OmniPDF`,
     render: (data) => `
       ${baseStyles}
@@ -234,7 +244,7 @@ export const templates: Record<string, EmailTemplate> = {
           Your ${data.conversionType} is Ready! ✅
         </h2>
         <p style="margin: 0 0 24px; color: #52525b; font-size: 16px; line-height: 1.6;">
-          Hi ${data.name || 'there'}, your document has been successfully converted.
+          Hi ${data.name || "there"}, your document has been successfully converted.
         </p>
         <table role="presentation" width="100%" cellspacing="0" cellpadding="0" style="background-color: #f4f4f5; border-radius: 8px; padding: 20px; margin-bottom: 24px;">
           <tr>
@@ -268,7 +278,7 @@ export const templates: Record<string, EmailTemplate> = {
     renderText: (data) => `
       Your ${data.conversionType} is Ready!
 
-      Hi ${data.name || 'there'}, your document has been successfully converted.
+      Hi ${data.name || "there"}, your document has been successfully converted.
 
       File: ${data.fileName}
       Type: ${data.conversionType}
@@ -283,7 +293,7 @@ export const templates: Record<string, EmailTemplate> = {
     `,
   },
 
-  'subscription-upgrade': {
+  "subscription-upgrade": {
     subject: (data) => `You've upgraded to ${data.planName} - OmniPDF`,
     render: (data) => `
       ${baseStyles}
@@ -291,7 +301,7 @@ export const templates: Record<string, EmailTemplate> = {
           Congratulations! 🎉
         </h2>
         <p style="margin: 0 0 24px; color: #52525b; font-size: 16px; line-height: 1.6;">
-          Hi ${data.name || 'there'}, you've successfully upgraded to the <strong>${data.planName}</strong> plan. Welcome to a more powerful OmniPDF experience!
+          Hi ${data.name || "there"}, you've successfully upgraded to the <strong>${data.planName}</strong> plan. Welcome to a more powerful OmniPDF experience!
         </p>
         <table role="presentation" width="100%" cellspacing="0" cellpadding="0" style="background-color: #f4f4f5; border-radius: 8px; padding: 20px; margin-bottom: 24px;">
           <tr>
@@ -299,19 +309,23 @@ export const templates: Record<string, EmailTemplate> = {
               <p style="margin: 0 0 12px; color: #18181b; font-size: 16px; font-weight: 600;">
                 Your new features:
               </p>
-              ${(data.newFeatures || []).map(feature => `
+              ${(data.newFeatures || [])
+                .map(
+                  (feature: string) => `
                 <p style="margin: 0 0 8px; color: #52525b; font-size: 14px; line-height: 1.5;">
                   <span style="color: #0ea5e9; margin-right: 8px;">✓</span>
                   ${feature}
                 </p>
-              `).join('')}
+              `,
+                )
+                .join("")}
             </td>
           </tr>
         </table>
         <table role="presentation" width="100%" cellspacing="0" cellpadding="0">
           <tr>
             <td style="text-align: center; padding: 20px 0;">
-              <a href="${data.billingUrl || 'https://omnipdf.com/dashboard'}" style="${buttonStyles}">
+              <a href="${data.billingUrl || "https://omnipdf.com/dashboard"}" style="${buttonStyles}">
                 View Your Plan
               </a>
             </td>
@@ -322,27 +336,27 @@ export const templates: Record<string, EmailTemplate> = {
     renderText: (data) => `
       Congratulations! You've upgraded to ${data.planName}
 
-      Hi ${data.name || 'there'}, you've successfully upgraded.
+      Hi ${data.name || "there"}, you've successfully upgraded.
 
       Your new features:
-      ${(data.newFeatures || []).map(feature => `✓ ${feature}`).join('\n')}
+      ${(data.newFeatures || []).map((feature: string) => `✓ ${feature}`).join("\n")}
 
-      View your plan: ${data.billingUrl || 'https://omnipdf.com/dashboard'}
+      View your plan: ${data.billingUrl || "https://omnipdf.com/dashboard"}
 
       Best regards,
       The OmniPDF Team
     `,
   },
 
-  'payment-failed': {
-    subject: () => 'Payment Failed - Action Required - OmniPDF',
+  "payment-failed": {
+    subject: () => "Payment Failed - Action Required - OmniPDF",
     render: (data) => `
       ${baseStyles}
         <h2 style="margin: 0 0 20px; color: #ef4444; font-size: 24px; font-weight: 600;">
           Payment Failed ⚠️
         </h2>
         <p style="margin: 0 0 24px; color: #52525b; font-size: 16px; line-height: 1.6;">
-          Hi ${data.name || 'there'}, we were unable to process your payment of <strong>${data.amount}</strong>.
+          Hi ${data.name || "there"}, we were unable to process your payment of <strong>${data.amount}</strong>.
         </p>
         <p style="margin: 0 0 24px; color: #52525b; font-size: 16px; line-height: 1.6;">
           We'll try again on <strong>${data.nextAttemptDate}</strong>. Please update your payment method to avoid service interruption.
@@ -364,7 +378,7 @@ export const templates: Record<string, EmailTemplate> = {
     renderText: (data) => `
       Payment Failed
 
-      Hi ${data.name || 'there'}, we were unable to process your payment of ${data.amount}.
+      Hi ${data.name || "there"}, we were unable to process your payment of ${data.amount}.
 
       We'll try again on ${data.nextAttemptDate}. Please update your payment method.
 
@@ -375,15 +389,15 @@ export const templates: Record<string, EmailTemplate> = {
     `,
   },
 
-  'storage-limit-warning': {
-    subject: () => 'Storage Limit Warning - OmniPDF',
+  "storage-limit-warning": {
+    subject: () => "Storage Limit Warning - OmniPDF",
     render: (data) => `
       ${baseStyles}
         <h2 style="margin: 0 0 20px; color: #f59e0b; font-size: 24px; font-weight: 600;">
           Storage Limit Warning ⚠️
         </h2>
         <p style="margin: 0 0 24px; color: #52525b; font-size: 16px; line-height: 1.6;">
-          Hi ${data.name || 'there'}, you're running low on cloud storage space.
+          Hi ${data.name || "there"}, you're running low on cloud storage space.
         </p>
         <table role="presentation" width="100%" cellspacing="0" cellpadding="0" style="background-color: #fef3c7; border-radius: 8px; padding: 20px; margin-bottom: 24px;">
           <tr>
@@ -411,7 +425,7 @@ export const templates: Record<string, EmailTemplate> = {
     renderText: (data) => `
       Storage Limit Warning
 
-      Hi ${data.name || 'there'}, you're running low on cloud storage space.
+      Hi ${data.name || "there"}, you're running low on cloud storage space.
 
       Current Usage: ${data.currentUsage}
       Storage Limit: ${data.storageLimit}
@@ -423,15 +437,15 @@ export const templates: Record<string, EmailTemplate> = {
     `,
   },
 
-  'security-alert': {
-    subject: () => 'Security Alert - Unusual Activity Detected - OmniPDF',
+  "security-alert": {
+    subject: () => "Security Alert - Unusual Activity Detected - OmniPDF",
     render: (data) => `
       ${baseStyles}
         <h2 style="margin: 0 0 20px; color: #ef4444; font-size: 24px; font-weight: 600;">
           Security Alert 🛡️
         </h2>
         <p style="margin: 0 0 24px; color: #52525b; font-size: 16px; line-height: 1.6;">
-          Hi ${data.name || 'there'}, we detected unusual activity on your OmniPDF account.
+          Hi ${data.name || "there"}, we detected unusual activity on your OmniPDF account.
         </p>
         <table role="presentation" width="100%" cellspacing="0" cellpadding="0" style="background-color: #fef2f2; border-radius: 8px; padding: 20px; margin-bottom: 24px;">
           <tr>
@@ -468,7 +482,7 @@ export const templates: Record<string, EmailTemplate> = {
     renderText: (data) => `
       Security Alert
 
-      Hi ${data.name || 'there'}, we detected unusual activity on your account.
+      Hi ${data.name || "there"}, we detected unusual activity on your account.
 
       Activity: ${data.activity}
       Location: ${data.location}

@@ -16,7 +16,6 @@ import {
   CardDescription,
 } from "@omnipdf/ui/src/Card";
 import { signInWithMagicLink } from "@/lib/auth/client";
-import type { MagicLinkRequest } from "@/lib/auth/types";
 
 interface MagicLinkFormProps {
   onSuccess?: () => void;
@@ -37,21 +36,13 @@ export function MagicLinkForm({
     setLoading(true);
     setError(null);
 
-    const request: MagicLinkRequest = {
-      email,
-      redirectTo:
-        typeof window !== "undefined"
-          ? `${window.location.origin}/auth/callback`
-          : undefined,
-    };
+    const { error: signInError } = await signInWithMagicLink(email);
 
-    const result = await signInWithMagicLink(request);
-
-    if (result.success) {
+    if (signInError) {
+      setError(signInError.message);
+    } else {
       setSuccess(true);
       onSuccess?.();
-    } else {
-      setError(result.message);
     }
 
     setLoading(false);
@@ -168,17 +159,9 @@ export function VerifyMagicLink({
 
   const handleResend = async () => {
     setResending(true);
-    const request: MagicLinkRequest = {
-      email,
-      redirectTo:
-        typeof window !== "undefined"
-          ? `${window.location.origin}/auth/callback`
-          : undefined,
-    };
+    const { error: signInError } = await signInWithMagicLink(email);
 
-    const result = await signInWithMagicLink(request);
-
-    if (result.success) {
+    if (!signInError) {
       setResendSuccess(true);
       onResend?.();
     }
