@@ -1,8 +1,9 @@
-import '@testing-library/jest-dom';
-import { jest } from '@jest/globals';
+// @ts-nocheck
+import "@testing-library/jest-dom";
+import { jest } from "@jest/globals";
 
 // Mock next/navigation
-jest.mock('next/navigation', () => ({
+jest.mock("next/navigation", () => ({
   useRouter: jest.fn(() => ({
     push: jest.fn(),
     replace: jest.fn(),
@@ -10,25 +11,69 @@ jest.mock('next/navigation', () => ({
     back: jest.fn(),
     prefetch: jest.fn(),
   })),
-  usePathname: jest.fn(() => '/'),
+  usePathname: jest.fn(() => "/"),
   useSearchParams: jest.fn(() => new URLSearchParams()),
 }));
 
+// Mock next/headers
+const mockCookies = {
+  get: jest.fn(() => undefined),
+  getAll: jest.fn(() => []),
+  set: jest.fn(),
+  delete: jest.fn(),
+};
+
+jest.mock("next/headers", () => ({
+  cookies: jest.fn(() => Promise.resolve(mockCookies)),
+}));
+
 // Mock Supabase
-jest.mock('@supabase/supabase-js', () => ({
-  createClient: jest.fn(() => ({
+jest.mock("@supabase/ssr", () => ({
+  createServerClient: jest.fn(() => ({
+    auth: {
+      signInWithPassword: jest.fn(),
+      signUp: jest.fn(),
+      signOut: jest.fn(),
+      getSession: jest
+        .fn()
+        .mockResolvedValue({ data: { session: null }, error: null }),
+      getUser: jest
+        .fn()
+        .mockResolvedValue({ data: { user: null }, error: null }),
+      resend: jest.fn(),
+      exchangeCodeForSession: jest.fn(),
+      signInWithOtp: jest.fn(),
+      signInWithOAuth: jest.fn(),
+    },
+    from: jest.fn(() => ({
+      select: jest.fn().mockReturnThis(),
+      insert: jest.fn().mockResolvedValue({ data: null, error: null }),
+      update: jest.fn().mockResolvedValue({ data: null, error: null }),
+      eq: jest.fn().mockResolvedValue({ data: null, error: null }),
+      single: jest.fn().mockResolvedValue({ data: null, error: null }),
+    })),
+    storage: {
+      from: jest.fn(() => ({
+        upload: jest.fn().mockResolvedValue({ data: null, error: null }),
+        remove: jest.fn().mockResolvedValue({ error: null }),
+        getPublicUrl: jest.fn().mockReturnValue({ data: { publicUrl: "" } }),
+      })),
+    },
+    rpc: jest.fn().mockResolvedValue({ data: null, error: null }),
+  })),
+  createBrowserClient: jest.fn(() => ({
     auth: {
       signInWithPassword: jest.fn(),
       signUp: jest.fn(),
       signOut: jest.fn(),
       getSession: jest.fn(),
-      resend: jest.fn(),
+      getUser: jest.fn(),
     },
   })),
 }));
 
 // Mock window.matchMedia
-Object.defineProperty(window, 'matchMedia', {
+Object.defineProperty(window, "matchMedia", {
   writable: true,
   value: jest.fn().mockImplementation((query) => ({
     matches: false,
@@ -47,40 +92,37 @@ global.ResizeObserver = class ResizeObserver {
   observe() {}
   unobserve() {}
   disconnect() {}
-} as unknown as typeof global.ResizeObserver;
+};
 
 // Mock IntersectionObserver
 global.IntersectionObserver = class IntersectionObserver {
   observe() {}
   unobserve() {}
   disconnect() {}
-} as unknown as typeof global.IntersectionObserver;
+};
 
 // Mock fetch
-global.fetch = jest.fn() as unknown as typeof global.fetch;
+global.fetch = jest.fn();
 
 // Mock crypto
-if (typeof crypto === 'undefined') {
-  (global as unknown as { crypto: Crypto }).crypto = {
-    randomUUID: () => 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, (c) => {
-      const r = (Math.random() * 16) | 0;
-      const v = c === 'x' ? r : (r & 0x3) | 0x8;
-      return v.toString(16);
-    }),
-  } as Crypto;
+if (typeof crypto === "undefined") {
+  global.crypto = {
+    randomUUID: () =>
+      "xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx".replace(/[xy]/g, (c) => {
+        const r = (Math.random() * 16) | 0;
+        const v = c === "x" ? r : (r & 0x3) | 0x8;
+        return v.toString(16);
+      }),
+  };
 }
 
 // Setup test utilities
 beforeAll(() => {
-  // Clean up after each test
   jest.clearAllMocks();
 });
 
 afterEach(() => {
-  // Reset mocks between tests
   jest.clearAllMocks();
 });
 
-afterAll(() => {
-  // Cleanup
-});
+afterAll(() => {});
