@@ -1,34 +1,62 @@
-'use client';
+"use client";
 
-import { useState } from 'react';
-import Link from 'next/link';
-import { useSession, signOut } from '@supabase/auth-helpers-react';
-import { useTheme } from 'next-themes';
-import { Button } from '@omnipdf/ui/src/Button';
-import { 
-  Menu, 
-  X, 
-  Sun, 
-  Moon, 
-  Cloud, 
+import { useState, useEffect } from "react";
+import Link from "next/link";
+import { useTheme } from "next-themes";
+import { Button } from "@omnipdf/ui/src/Button";
+import {
+  createClient,
+  signOut as supabaseSignOut,
+  getSession,
+} from "@/lib/auth/client";
+import {
+  Menu,
+  X,
+  Sun,
+  Moon,
+  Cloud,
   ChevronDown,
   User,
   LogOut,
   Settings,
-  FileText
-} from 'lucide-react';
-import { cn } from '@omnipdf/shared/src/utils';
+  FileText,
+} from "lucide-react";
+import { cn } from "@omnipdf/shared/src/utils";
+
+interface SessionUser {
+  email?: string;
+  user_metadata: {
+    name?: string;
+    avatar_url?: string;
+  };
+}
+
+interface Session {
+  user: SessionUser;
+}
 
 export function Header() {
-  const { session } = useSession();
+  const [session, setSession] = useState<Session | null>(null);
   const { theme, setTheme } = useTheme();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [userMenuOpen, setUserMenuOpen] = useState(false);
 
+  useEffect(() => {
+    getSession().then((sess) => {
+      setSession(sess as Session | null);
+    });
+  }, []);
+
+  const handleSignOut = async () => {
+    await supabaseSignOut();
+    setSession(null);
+    setUserMenuOpen(false);
+  };
+
   const navLinks = [
-    { href: '/convert', label: 'Convert' },
-    { href: '/tools', label: 'All Tools' },
-    { href: '/pricing', label: 'Pricing' },
+    { href: "/convert", label: "Convert" },
+    { href: "/tools", label: "All Tools" },
+    { href: "/pricing", label: "Pricing" },
   ];
 
   return (
@@ -64,7 +92,7 @@ export function Header() {
             <Button
               variant="ghost"
               size="icon"
-              onClick={() => setTheme(theme === 'dark' ? 'light' : 'dark')}
+              onClick={() => setTheme(theme === "dark" ? "light" : "dark")}
               className="hidden sm:flex"
             >
               <Sun className="h-5 w-5 rotate-0 scale-100 transition-all dark:-rotate-90 dark:scale-0" />
@@ -114,10 +142,7 @@ export function Header() {
                     </Link>
                     <hr className="my-1 border-surface-200 dark:border-surface-700" />
                     <button
-                      onClick={() => {
-                        setUserMenuOpen(false);
-                        signOut();
-                      }}
+                      onClick={handleSignOut}
                       className="flex w-full items-center gap-2 px-4 py-2 text-sm text-red-600 hover:bg-red-50 dark:hover:bg-red-900/20"
                     >
                       <LogOut className="h-4 w-4" />

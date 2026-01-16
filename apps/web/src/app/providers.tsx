@@ -1,16 +1,19 @@
-'use client';
+"use client";
 
-import { ReactNode, useEffect, useState } from 'react';
-import { createContext } from 'react';
-import { createBrowserClient } from '@supabase/ssr';
-import { ThemeProvider, useTheme } from 'next-themes';
-import '@/lib/i18n/i18n';
+import { ReactNode, useEffect, useState } from "react";
+import { createContext } from "react";
+import { createBrowserClient } from "@supabase/ssr";
+import { ThemeProvider } from "next-themes";
+import { useTranslation } from "react-i18next";
+import "@/lib/i18n/i18n";
 
 interface ProvidersProps {
   children: ReactNode;
 }
 
-export const SupabaseContext = createContext<ReturnType<typeof createBrowserClient> | null>(null);
+export const SupabaseContext = createContext<ReturnType<
+  typeof createBrowserClient
+> | null>(null);
 
 function I18nProvider({ children }: { children: ReactNode }) {
   const { i18n } = useTranslation();
@@ -31,8 +34,8 @@ export function Providers({ children }: ProvidersProps) {
   const [supabase] = useState(() =>
     createBrowserClient(
       process.env.NEXT_PUBLIC_SUPABASE_URL!,
-      process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
-    )
+      process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
+    ),
   );
 
   return (
